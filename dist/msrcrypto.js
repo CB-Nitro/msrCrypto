@@ -6653,7 +6653,12 @@ if (typeof operations !== "undefined") {
 
     msrcryptoGcm.importKey = function ( p) {
 
-        var keyObject = msrcryptoJwk.jwkToKey(p.keyData, p.algorithm, ["k"]);
+        var keyObject;
+        if (p.format === "raw") {
+            keyObject = { k: p.keyData };
+        } else {
+            keyObject = msrcryptoJwk.jwkToKey(p.keyData, p.algorithm, ["k"]);
+        }
 
         return {
             type: "keyImport",
@@ -9121,9 +9126,9 @@ function buildParameterCollection(operationName, parameterSet) {
         }
 
         // Verify the actual parameter is of the expected type.
-        if (msrcryptoUtilities.getObjectType(actualParam) !== expectedParam.type) {
-            throw new Error(expectedParam.name);
-        }
+        //if (msrcryptoUtilities.getObjectType(actualParam) !== expectedParam.type) {
+        //    throw new Error(expectedParam.name);
+        //}
 
         // If this parameter is an algorithm object convert it's name to lowercase.
         if (expectedParam.name === "algorithm") {
